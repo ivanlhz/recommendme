@@ -3,7 +3,7 @@
 import { RecommendationForm } from "@/components/molecules/RecommendationForm";
 import { RecommendationItem } from "@/components/molecules/RecommendationItem";
 import { UserProfile } from "@/components/molecules/UserProfile";
-import { mockTargetUser, mockExistingRecommendations } from "@/mocks/recommendation";
+import { mockTargetUser, mockExistingRecommendations } from "@/mocks/recommendation.mock";
 
 export default function RecommendationsPage() {
   // En una aplicación real, estos datos vendrían de una API o base de datos
@@ -28,8 +28,6 @@ export default function RecommendationsPage() {
       
       {mockExistingRecommendations.length > 0 && (
         <div className="space-y-4">
-          <h3 className="text-lg font-medium">Recomendaciones existentes</h3>
-          <div className="space-y-4">
             {mockExistingRecommendations.map((recommendation) => (
               <RecommendationItem
                 key={recommendation.id}
@@ -38,7 +36,6 @@ export default function RecommendationsPage() {
                 date={recommendation.date}
               />
             ))}
-          </div>
         </div>
       )}
     </div>
