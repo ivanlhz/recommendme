@@ -1,47 +1,142 @@
 'use client';
 
-import { useState } from "react";
-import { Textarea } from "@/components/ui/textarea";
-import { SubmitButton } from "@/components/atoms/SubmitButton";
-import { cn } from "@/lib/utils";
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import { RecommendationFormValues, recommendationSchema } from '@/schemas/recommendation.schema';
+import { useRecommendations } from '@/contexts/RecommendationContext';
 
 interface RecommendationFormProps {
-  onSubmit?: (recommendation: string) => void;
   className?: string;
+  onSuccess?: () => void;
 }
 
-export function RecommendationForm({ onSubmit, className }: RecommendationFormProps) {
-  const [recommendation, setRecommendation] = useState("");
-  const minChars = 50;
-  const isValid = recommendation.length >= minChars;
+export function RecommendationForm({ className, onSuccess }: RecommendationFormProps) {
+  const { 
+    addRecommendation, 
+    updateRecommendation, 
+    isEditing, 
+    getRecommendation,
+    setIsEditing 
+  } = useRecommendations();
+  
+  const { 
+    register, 
+    handleSubmit, 
+    formState: { errors, isSubmitting },
+    reset,
+    setValue,
+    control,
+  } = useForm<RecommendationFormValues>({
+    resolver: zodResolver(recommendationSchema) as any, // Usamos 'as any' temporalmente para evitar problemas de tipos
+    defaultValues: {
+      content: '',
+      author: {
+        name: 'Usuario Actual',
+        position: 'Desarrollador',
+        company: 'Mi Empresa',
+        avatarUrl: '/images/avatars/current-user.jpg',
+      },
+      date: new Date(),
+    },
+  });
 
-  const handleSubmit = () => {
-    if (isValid && onSubmit) {
-      onSubmit(recommendation);
-      setRecommendation("");
+  // Cargar datos de la recomendación si estamos editando
+  useEffect(() => {
+    if (isEditing) {
+      const recommendation = getRecommendation(isEditing);
+      if (recommendation) {
+        // Actualizar los valores del formulario con los datos de la recomendación
+        const { id, ...formData } = recommendation;
+        
+        // Establecer los valores del formulario de forma segura
+        setValue('content', formData.content);
+        setValue('author', {
+          name: formData.author.name,
+          position: formData.author.position,
+          company: formData.author.company,
+          avatarUrl: formData.author.avatarUrl || '/images/avatars/current-user.jpg',
+        });
+        setValue('date', formData.date instanceof Date ? formData.date : new Date(formData.date));
+      }
+    } else {
+      reset({
+        content: '',
+        author: {
+          name: 'Usuario Actual',
+          position: 'Desarrollador',
+          company: 'Mi Empresa',
+          avatarUrl: '/images/avatars/current-user.jpg',
+        },
+        date: new Date(),
+      });
+    }
+  }, [isEditing, getRecommendation, setValue, reset]);
+
+  const onSubmit = async (data: RecommendationFormValues) => {
+    try {
+      if (isEditing) {
+        updateRecommendation(isEditing, data);
+      } else {
+        addRecommendation(data);
+      }
+      reset();
+      onSuccess?.();
+    } catch (error) {
+      console.error('Error al guardar la recomendación:', error);
     }
   };
 
+  const handleCancel = () => {
+    setIsEditing(null);
+    reset();
+  };
+
   return (
-    <div className={cn("space-y-4", className)}>
-      <h2 className="text-xl font-semibold">Recomendaciones</h2>
-      <Textarea 
-        placeholder="Escribe tu recomendación profesional (mínimo 50 caracteres)..."
-        value={recommendation}
-        onChange={(e) => setRecommendation(e.target.value)}
-        className="min-h-[150px]"
-      />
-      <div className="flex justify-between items-center">
-        <p className="text-sm text-muted-foreground">
-          Mínimo {minChars} caracteres requeridos
-        </p>
-        <SubmitButton 
-          label="Enviar Recomendación" 
-          onClick={handleSubmit}
-          disabled={!isValid}
-        />
-      </div>
-      
+    <div className={cn('space-y-4', className)}>
+      <h2 className="text-xl font-semibold">
+        {isEditing ? 'Editar Recomendación' : 'Nueva Recomendación'}
+      </h2>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <div>
+          <Textarea
+            placeholder="Escribe tu recomendación profesional (mínimo 50 caracteres)..."
+            className={cn('min-h-[150px]', errors.content && 'border-red-500')}
+            {...register('content')}
+          />
+          {errors.content && (
+            <p className="mt-1 text-sm text-red-500">
+              {errors.content.message}
+            </p>
+          )}
+          <p className="mt-1 text-sm text-muted-foreground">
+            Mínimo 50 caracteres requeridos
+          </p>
+        </div>
+        
+        <div className="flex justify-end space-x-2">
+          {isEditing && (
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleCancel}
+              disabled={isSubmitting}
+            >
+              Cancelar
+            </Button>
+          )}
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting 
+              ? 'Guardando...' 
+              : isEditing 
+                ? 'Actualizar Recomendación' 
+                : 'Enviar Recomendación'}
+          </Button>
+        </div>
+      </form>
     </div>
   );
 }
