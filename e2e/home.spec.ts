@@ -5,25 +5,41 @@ test.describe('Home Page E2E Tests', () => {
     await page.goto('/');
   });
 
-  test('should display the main title and core elements', async ({ page }) => {
-    await expect(page.getByRole('heading', { name: 'RecommendMe' })).toBeVisible();
-    await expect(page.getByText('Encuentra Algo Nuevo')).toBeVisible();
-    await expect(page.getByPlaceholder('Escribe tus intereses aquí...')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Buscar Recomendaciones' })).toBeVisible();
+  test('should display the hero section with main title and buttons', async ({ page }) => {
+    await expect(page.getByRole('heading', { name: 'Potencia tu carrera con recomendaciones profesionales' })).toBeVisible();
+    await expect(page.getByText('Conecta con profesionales, obtén recomendaciones valiosas')).toBeVisible();
+    await expect(page.getByText('Dar una recomendación')).toHaveCount(2);
+    await expect(page.getByText('Explorar mi red')).toBeVisible();
   });
 
-  test('should open and verify the "Más Información" dialog', async ({ page }) => {
-    await page.getByRole('button', { name: 'Más Información' }).click();
-    await expect(page.getByRole('heading', { name: '¿Cómo Funciona?' })).toBeVisible();
-    await expect(page.getByText('RecommendMe utiliza algoritmos avanzados')).toBeVisible();
-    await page.getByRole('button', { name: 'Entendido' }).click();
-    await expect(page.getByRole('heading', { name: '¿Cómo Funciona?' })).not.toBeVisible();
+  test('should display the features section with three cards', async ({ page }) => {
+    await expect(page.getByRole('heading', { name: '¿Por qué usar ProNet?' })).toBeVisible();
+    await expect(page.getByText('Recomendaciones verificadas')).toBeVisible();
+    await expect(page.getByText('Amplía tu red profesional')).toBeVisible();
+    await expect(page.getByText('Destaca en tu búsqueda laboral')).toBeVisible();
   });
 
-  test('should open and verify the "Opciones" dropdown menu', async ({ page }) => {
-    await page.getByRole('button', { name: 'Opciones' }).click();
-    await expect(page.getByRole('menuitem', { name: 'Perfil' })).toBeVisible();
-    await expect(page.getByRole('menuitem', { name: 'Configuración' })).toBeVisible();
-    await expect(page.getByRole('menuitem', { name: 'Cerrar Sesión' })).toBeVisible();
+  test('should display the testimonials section with recommendations', async ({ page }) => {
+    await expect(page.getByRole('heading', { name: 'Recomendaciones destacadas' })).toBeVisible();
+    await expect(page.locator('.pt-6').first()).toBeVisible();
+  });
+
+  test('should display the CTA section with call to action button', async ({ page }) => {
+    await expect(page.getByRole('heading', { name: 'Comienza a construir tu red profesional hoy' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Crear cuenta gratuita' })).toBeVisible();
+  });
+
+  test('should display the footer with company info and links', async ({ page }) => {
+    await expect(page.getByText('ProNet')).toHaveCount(3);
+    await expect(page.getByText('Conectando profesionales desde 2025')).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Sobre nosotros' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Privacidad' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Términos' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Contacto' })).toBeVisible();
+  });
+
+  test('should navigate to recommendations page when clicking on recommendation link', async ({ page }) => {
+    await page.getByRole('link', { name: 'Dar una recomendación' }).first().click();
+    await expect(page).toHaveURL('/recommendations');
   });
 });

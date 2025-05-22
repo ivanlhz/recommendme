@@ -54,7 +54,7 @@ export function HeroSection({
                 width={500}
                 height={500}
                 src={imageSrc} 
-                alt="Profesionales conectados" 
+                alt="Red de profesionales conectados" 
                 className="w-full max-w-md mx-auto"
               />
             </div>

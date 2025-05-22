@@ -9,7 +9,7 @@ interface FeatureCardProps {
 
 export function FeatureCard({ title, description, className }: FeatureCardProps) {
   return (
-    <Card className={cn("border-none shadow-md", className)}>
+    <Card className={cn("border-none shadow-md", className)} data-testid="feature-card">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
       </CardHeader>

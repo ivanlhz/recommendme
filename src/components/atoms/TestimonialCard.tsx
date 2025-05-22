@@ -21,7 +21,7 @@ export function TestimonialCard({ content, author, className }: TestimonialCardP
     .toUpperCase();
 
   return (
-    <Card className={cn("border-none shadow-md", className)}>
+    <Card className={cn("border-none shadow-md", className)} data-testid="testimonial-card">
       <CardContent className="pt-6">
         <div className="flex items-start gap-4">
           <Avatar 

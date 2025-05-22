@@ -22,7 +22,7 @@ export function RecommendationItem({ author, content, date, className }: Recomme
     .toUpperCase();
 
   return (
-    <div className={cn("flex space-x-4 p-4 border rounded-lg", className)}>
+    <div className={cn("flex space-x-4 p-4 border rounded-lg", className)} data-testid="recommendation-item">
       <Avatar 
         src={author.avatarUrl} 
         fallback={initials} 
