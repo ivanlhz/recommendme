@@ -1,4 +1,4 @@
-import { AuthCredentials, AuthUser, AuthResponse, LogoutResponse } from './auth.types'
+import { AuthCredentials, AuthResponse, LogoutResponse } from './auth.types'
 import { mockCurrentUser } from '@/mocks/recommendation.mock'
 
 const DEMO_EMAIL = 'demo@demo.com'
@@ -7,9 +7,9 @@ const DEMO_TOKEN = 'demo-bearer-token'
 
 export const loginRepository = async (credentials: AuthCredentials): Promise<AuthResponse> => {
   if (credentials.email === DEMO_EMAIL && credentials.password === DEMO_PASSWORD) {
-    // Simular guardar token en localStorage
+    // Guardar token en cookies para que el middleware lo lea
     if (typeof window !== 'undefined') {
-      localStorage.setItem('auth_token', DEMO_TOKEN)
+      document.cookie = `auth_token=${DEMO_TOKEN}; path=/`;
     }
     return {
       user: { ...mockCurrentUser, email: DEMO_EMAIL },
@@ -21,14 +21,22 @@ export const loginRepository = async (credentials: AuthCredentials): Promise<Aut
 
 export const logoutRepository = async (): Promise<LogoutResponse> => {
   if (typeof window !== 'undefined') {
-    localStorage.removeItem('auth_token')
+    document.cookie = 'auth_token=; Max-Age=0; path=/';
   }
   return { success: true }
 }
 
+function getCookie(name: string): string | undefined {
+  if (typeof document === 'undefined') return undefined;
+  return document.cookie
+    .split('; ')
+    .find(row => row.startsWith(name + '='))
+    ?.split('=')[1];
+}
+
 export const getCurrentUserRepository = async (): Promise<AuthResponse | null> => {
   if (typeof window !== 'undefined') {
-    const token = localStorage.getItem('auth_token')
+    const token = getCookie('auth_token');
     if (token === DEMO_TOKEN) {
       return {
         user: { ...mockCurrentUser, email: DEMO_EMAIL },
@@ -36,5 +44,5 @@ export const getCurrentUserRepository = async (): Promise<AuthResponse | null> =
       }
     }
   }
-  return null
+  return null;
 }

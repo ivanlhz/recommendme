@@ -5,6 +5,8 @@ import { CtaSection } from "@/components/molecules/CtaSection";
 import { Footer } from "@/components/molecules/Footer";
 import { mockExistingRecommendations } from "@/mocks/recommendation.mock";
 
+import { Header } from "@/components/organisms/Header"; 
+
 export default function Home() {
   const features = [
     {
@@ -30,6 +32,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <Header />
       <HeroSection 
         title="Potencia tu carrera con recomendaciones profesionales"
         subtitle="Conecta con profesionales, obtén recomendaciones valiosas y destaca en tu industria."
