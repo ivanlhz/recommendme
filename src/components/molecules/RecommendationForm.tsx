@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { RecommendationFormValues, recommendationSchema } from '@/schemas/recommendation.schema';
+import { RecommendationFormValues, createRecommendationSchema } from '@/schemas/recommendation.schema';
 import { useRecommendations } from '@/contexts/RecommendationContext';
 
 interface RecommendationFormProps {
@@ -29,9 +29,8 @@ export function RecommendationForm({ className, onSuccess }: RecommendationFormP
     formState: { errors, isSubmitting },
     reset,
     setValue,
-    control,
   } = useForm<RecommendationFormValues>({
-    resolver: zodResolver(recommendationSchema) as any, // Usamos 'as any' temporalmente para evitar problemas de tipos
+    resolver: zodResolver(createRecommendationSchema) as any, // Usamos 'as any' temporalmente para evitar problemas de tipos
     defaultValues: {
       content: '',
       author: {
@@ -44,15 +43,11 @@ export function RecommendationForm({ className, onSuccess }: RecommendationFormP
     },
   });
 
-  // Cargar datos de la recomendación si estamos editando
   useEffect(() => {
     if (isEditing) {
       const recommendation = getRecommendation(isEditing);
       if (recommendation) {
-        // Actualizar los valores del formulario con los datos de la recomendación
         const { id, ...formData } = recommendation;
-        
-        // Establecer los valores del formulario de forma segura
         setValue('content', formData.content);
         setValue('author', {
           name: formData.author.name,
@@ -108,13 +103,10 @@ export function RecommendationForm({ className, onSuccess }: RecommendationFormP
             {...register('content')}
           />
           {errors.content && (
-            <p className="mt-1 text-sm text-red-500">
+            <p className="mt-2 text-sm text-red-500">
               {errors.content.message}
             </p>
           )}
-          <p className="mt-1 text-sm text-muted-foreground">
-            Mínimo 50 caracteres requeridos
-          </p>
         </div>
         
         <div className="flex justify-end space-x-2">

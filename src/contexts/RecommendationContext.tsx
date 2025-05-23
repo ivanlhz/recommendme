@@ -31,6 +31,7 @@ export function RecommendationProvider({
   const addRecommendation = (recommendation: z.infer<typeof createRecommendationSchema>) => {
     const result = recommendationSchema.safeParse({
       ...recommendation,
+      id: z.string().uuid(),
     });
 
     if (!result.success) {
@@ -73,7 +74,7 @@ export function RecommendationProvider({
   };
 
   return (
-    <RecommendationContext.Provider 
+    <RecommendationContext 
       value={{
         recommendations,
         addRecommendation,
@@ -85,7 +86,7 @@ export function RecommendationProvider({
       }}
     >
       {children}
-    </RecommendationContext.Provider>
+    </RecommendationContext>
   );
 }
 
