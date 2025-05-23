@@ -4,15 +4,41 @@ Bienvenido a RecommendMe, una aplicación web moderna construida con Next.js, Ty
 
 ## Características Principales
 
-*   **Next.js 14.x**: Utilizando el App Router para una estructura de enrutamiento moderna.
+### Atomic Design
+
+El proyecto sigue el patrón Atomic Design para la organización de componentes:
+
+- **Átomos:** Avatar, BackButton, ButtonWithIcon, FeatureCard, InputField, Logo, NavItem, NotificationBell, SectionTitle, SubmitButton, TestimonialCard
+- **Moléculas:** ContactForm, ContactInfo, CtaSection, FeaturesSection, Footer, HeroSection, LoginForm, Navigation, RecommendationForm, RecommendationItem, TestimonialsSection, UserProfile
+- **Organismos:** Header
+
+Esto permite una escalabilidad y mantenibilidad óptima del sistema de UI.
+
+### Tecnologías y Librerías
+
+- **Next.js 15.x**
+- **React 19.x**
+- **TypeScript 5.x**
+- **Tailwind CSS 4.x**
+- **ShadCN UI** (Radix UI, lucide-react, sonner, etc)
+- **react-hook-form** para formularios
+- **zod** para validación
+- **TanStack React Query** para estado del servidor
+- **Jest** y **@testing-library/react**
+- **Playwright**
+- **PNPM**
+- **ESLint** y **Prettier**
+
+*   **Next.js 15.x**: Utilizando el App Router para una estructura de enrutamiento moderna.
 *   **TypeScript 5.x**: Tipado estricto para un desarrollo más robusto.
-*   **Tailwind CSS 3.x**: Framework CSS utility-first para un diseño rápido y personalizable.
-*   **ShadCN UI**: Biblioteca de componentes pre-construidos y accesibles.
+*   **Tailwind CSS 4.x**: Framework CSS utility-first para un diseño rápido y personalizable.
+*   **ShadCN UI**: Biblioteca de componentes pre-construidos y accesibles (Radix UI, lucide-react, sonner, etc).
 *   **ESLint & Prettier**: Para mantener la calidad y consistencia del código.
-*   **Formik & Zod**: (Próximamente) Para la gestión de formularios y validación de esquemas.
-*   **React Query (TanStack Query v5.x)**: (Próximamente) Para una gestión eficiente del estado del servidor y caching de API.
+*   **react-hook-form**: Gestión eficiente de formularios en React.
+*   **zod**: Validación de esquemas y datos en los formularios.
+*   **TanStack React Query**: Gestión eficiente del estado del servidor y caching de API.
 *   **Jest & React Testing Library**: Para pruebas unitarias y de integración.
-*   **Playwright v1.x**: Para pruebas End-to-End (E2E).
+*   **Playwright**: Para pruebas End-to-End (E2E).
 *   **Git**: Para el control de versiones.
 *   **PNPM**: Como gestor de paquetes.
 
