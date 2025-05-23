@@ -1,5 +1,6 @@
 import { Header } from "@/components/organisms/Header";
 import { cn } from "@/lib/utils";
+import { mockCurrentUser } from "@/mocks/recommendation.mock";
 
 interface RecommendationPageTemplateProps {
   currentUser: {
@@ -36,9 +37,9 @@ export default function RecommendationPageLayout({
   return (
     <div className={cn("min-h-screen flex flex-col", className)}>
       <Header 
-        userName="Usuario"
-        userAvatarUrl=""
-        notificationCount={0}
+        userName={mockCurrentUser.name}
+        userAvatarUrl={mockCurrentUser.avatarUrl}
+        notificationCount={1}
       />
       <main className="flex-1 container mx-auto px-4 py-8">
        {children}

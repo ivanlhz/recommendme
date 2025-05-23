@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { RecommendationForm } from '@/components/molecules/RecommendationForm';
 import { RecommendationItem } from '@/components/molecules/RecommendationItem';
 import { UserProfile } from '@/components/molecules/UserProfile';
-import { mockTargetUser, mockExistingRecommendations } from '@/mocks/recommendation.mock';
+import { mockTargetUser, mockExistingRecommendations, mockCurrentUser } from '@/mocks/recommendation.mock';
 import { RecommendationProvider, useRecommendations } from '@/contexts/RecommendationContext';
 import { Recommendation } from '@/schemas/recommendation.schema';
 import { Button } from '@/components/ui/button';
@@ -44,7 +44,6 @@ function RecommendationsContent() {
         />
       </div>
       <div className="md:col-span-2 space-y-6">
-        {/* Botón para agregar nueva recomendación */}
         {!showForm && !isEditing && (
           <div className="flex justify-end">
             <Button onClick={handleAddRecommendation}>
@@ -54,14 +53,12 @@ function RecommendationsContent() {
           </div>
         )}
 
-        {/* Formulario de recomendación */}
         {(showForm || isEditing) && (
           <div id="recommendation-form" className="border rounded-lg p-6">
             <RecommendationForm onSuccess={handleSuccess} />
           </div>
         )}
         
-        {/* Lista de recomendaciones */}
         {recommendations.length > 0 ? (
           <div className="space-y-4">
             {recommendations.map((recommendation) => (
@@ -71,7 +68,7 @@ function RecommendationsContent() {
                 author={recommendation.author}
                 content={recommendation.content}
                 date={new Date(recommendation.date)}
-                isCurrentUser={recommendation.author.name === 'Usuario Actual'}
+                isCurrentUser={recommendation.author.name === mockCurrentUser.name}
               />
             ))}
           </div>
@@ -93,12 +90,11 @@ function RecommendationsContent() {
   );
 }
 
-// Componente principal que envuelve el contenido con el Provider
+
 export default function RecommendationsPage() {
-  // Transformar los mocks al tipo Recommendation
   const initialRecommendations: Recommendation[] = mockExistingRecommendations.map(rec => ({
     ...rec,
-    id: rec.id || Date.now().toString(),
+    id: rec.id || crypto.randomUUID(),
     date: rec.date instanceof Date ? rec.date : new Date(rec.date)
   }));
 

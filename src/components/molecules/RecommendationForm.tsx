@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { RecommendationFormValues, createRecommendationSchema } from '@/schemas/recommendation.schema';
 import { useRecommendations } from '@/contexts/RecommendationContext';
+import { mockCurrentUser } from '@/mocks/recommendation.mock';
 
 interface RecommendationFormProps {
   className?: string;
@@ -60,12 +61,7 @@ export function RecommendationForm({ className, onSuccess }: RecommendationFormP
     } else {
       reset({
         content: '',
-        author: {
-          name: 'Usuario Actual',
-          position: 'Desarrollador',
-          company: 'Mi Empresa',
-          avatarUrl: '/images/avatars/current-user.jpg',
-        },
+        author: mockCurrentUser,
         date: new Date(),
       });
     }

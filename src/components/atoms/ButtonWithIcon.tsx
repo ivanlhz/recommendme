@@ -22,7 +22,7 @@ export function ButtonWithIcon({
     <Button
       onClick={onClick}
       disabled={disabled}
-      className={cn('rounded-full flex items-center gap-2 hover:cursor-pointer', className)}
+      className={cn('flex items-center gap-2 hover:cursor-pointer', className)}
       variant={variant}
     >
       {icon}

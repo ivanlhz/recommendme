@@ -79,16 +79,13 @@ export function RecommendationItem({
         <div className="space-y-2 flex-1 min-w-0">
           <div className="flex justify-between">
             <div className="min-w-0">
-              <h3 className="font-medium truncate">{author.name}</h3>
+              <h3 className="font-medium truncate">{isCurrentUser ? "Tú" : author.name}</h3>
               <p className="text-sm text-muted-foreground truncate">
                 {author.position} en {author.company}
               </p>
             </div>
             <div className="flex items-start space-x-2">
-              <time className="text-sm text-muted-foreground whitespace-nowrap">
-                {formatDate(date)}
-              </time>
-              {isCurrentUser && (
+                {isCurrentUser && (
                 <div className="flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
                   <Button 
                     variant="ghost" 
@@ -110,6 +107,9 @@ export function RecommendationItem({
                   </Button>
                 </div>
               )}
+              <time className="text-sm text-muted-foreground whitespace-nowrap">
+                {formatDate(date)}
+              </time>
             </div>
           </div>
           <p className="text-sm whitespace-pre-line break-words">{content}</p>
